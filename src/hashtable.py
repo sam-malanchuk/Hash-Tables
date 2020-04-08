@@ -25,7 +25,6 @@ class HashTable:
         '''
         return hash(key)
 
-
     def _hash_djb2(self, key):
         '''
         Hash an arbitrary key using DJB2 hash
@@ -54,6 +53,15 @@ class HashTable:
 
         Fill this in.
         '''
+        key = self._hash(key)
+        index = self._hash_mod(key)
+
+        if self.storage[index] is not None:
+            print("ERROR: Index already taken by another value")
+        else:
+            self.storage[index] = value
+
+        print(self.storage)
         pass
 
 
@@ -90,31 +98,34 @@ class HashTable:
         pass
 
 
+hashTable = HashTable(8)
+hashTable.insert('key', 'value')
 
-if __name__ == "__main__":
-    ht = HashTable(2)
 
-    ht.insert("line_1", "Tiny hash table")
-    ht.insert("line_2", "Filled beyond capacity")
-    ht.insert("line_3", "Linked list saves the day!")
+# if __name__ == "__main__":
+#     ht = HashTable(2)
 
-    print("")
+#     ht.insert("line_1", "Tiny hash table")
+#     ht.insert("line_2", "Filled beyond capacity")
+#     ht.insert("line_3", "Linked list saves the day!")
 
-    # Test storing beyond capacity
-    print(ht.retrieve("line_1"))
-    print(ht.retrieve("line_2"))
-    print(ht.retrieve("line_3"))
+#     print("")
 
-    # Test resizing
-    old_capacity = len(ht.storage)
-    ht.resize()
-    new_capacity = len(ht.storage)
+#     # Test storing beyond capacity
+#     print(ht.retrieve("line_1"))
+#     print(ht.retrieve("line_2"))
+#     print(ht.retrieve("line_3"))
 
-    print(f"\nResized from {old_capacity} to {new_capacity}.\n")
+#     # Test resizing
+#     old_capacity = len(ht.storage)
+#     ht.resize()
+#     new_capacity = len(ht.storage)
 
-    # Test if data intact after resizing
-    print(ht.retrieve("line_1"))
-    print(ht.retrieve("line_2"))
-    print(ht.retrieve("line_3"))
+#     print(f"\nResized from {old_capacity} to {new_capacity}.\n")
 
-    print("")
+#     # Test if data intact after resizing
+#     print(ht.retrieve("line_1"))
+#     print(ht.retrieve("line_2"))
+#     print(ht.retrieve("line_3"))
+
+#     print("")
