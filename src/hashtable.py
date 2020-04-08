@@ -61,9 +61,7 @@ class HashTable:
         else:
             self.storage[index] = value
 
-        print(self.storage)
         pass
-
 
 
     def remove(self, key):
@@ -74,6 +72,14 @@ class HashTable:
 
         Fill this in.
         '''
+        key = self._hash(key)
+        index = self._hash_mod(key)
+        
+        if self.storage[index] is not None:
+            self.storage[index] = None
+        else:
+            print("ERROR: This is nothing at the index")
+
         pass
 
 
@@ -99,7 +105,11 @@ class HashTable:
 
 
 hashTable = HashTable(8)
-hashTable.insert('key', 'value')
+hashTable.insert('somekey', 'somevalue')
+print("Added a value", hashTable.storage)
+
+hashTable.remove('somekey')
+print("Removed a value", hashTable.storage)
 
 
 # if __name__ == "__main__":
