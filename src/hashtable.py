@@ -106,12 +106,19 @@ class HashTable:
 
         Fill this in.
         '''
+        # double the capacity of storage
+        self.capacity *= 2
+        # create a new temp storage to copy
+        new_storage = [None] * self.capacity
+        # move all the elements from old to new
+        #incomplete
         pass
 
 
 hashTable = HashTable(8)
 hashTable.insert('somekey', 'somevalue')
-print("Added a value", hashTable.storage)
+hashTable.insert('somekey2', 'somevalue2')
+print("Added values", hashTable.storage)
 
 print("Retrieve key that exists", hashTable.retrieve('somekey'))
 print("Retrieve key that does not exists", hashTable.retrieve('somekey2'))
