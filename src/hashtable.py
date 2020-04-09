@@ -53,7 +53,6 @@ class HashTable:
 
         Fill this in.
         '''
-        key = self._hash(key)
         index = self._hash_mod(key)
 
         if self.storage[index] is not None:
@@ -72,7 +71,6 @@ class HashTable:
 
         Fill this in.
         '''
-        key = self._hash(key)
         index = self._hash_mod(key)
         
         if self.storage[index] is not None:
@@ -91,8 +89,12 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        index = self._hash_mod(key)
 
+        if self.storage[index] is not None:
+            return self.storage[index]
+        else:
+            return None
 
     def resize(self):
         '''
@@ -107,6 +109,9 @@ class HashTable:
 hashTable = HashTable(8)
 hashTable.insert('somekey', 'somevalue')
 print("Added a value", hashTable.storage)
+
+print("Retrieve key that exists", hashTable.retrieve('somekey'))
+print("Retrieve key that does not exists", hashTable.retrieve('somekey2'))
 
 hashTable.remove('somekey')
 print("Removed a value", hashTable.storage)
