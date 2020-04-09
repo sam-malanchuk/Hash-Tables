@@ -25,14 +25,16 @@ class HashTable:
         '''
         return hash(key)
 
-
     def _hash_djb2(self, key):
         '''
         Hash an arbitrary key using DJB2 hash
 
         OPTIONAL STRETCH: Research and implement DJB2
         '''
-        pass
+        hash = 5381
+        for x in key:
+            hash = (( hash << 5) + hash) + ord(x)
+        return hash & 0xFFFFFFFF
 
 
     def _hash_mod(self, key):
@@ -40,7 +42,7 @@ class HashTable:
         Take an arbitrary key and return a valid integer index
         within the storage capacity of the hash table.
         '''
-        return self._hash(key) % self.capacity
+        return self._hash_djb2(key) % self.capacity
 
 
     def insert(self, key, value):
@@ -54,8 +56,14 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        index = self._hash_mod(key)
 
+        if self.storage[index] is not None:
+            print("ERROR: Index already taken by another value")
+        else:
+            self.storage[index] = value
+
+        pass
 
 
     def remove(self, key):
@@ -66,6 +74,13 @@ class HashTable:
 
         Fill this in.
         '''
+        index = self._hash_mod(key)
+        
+        if self.storage[index] is not None:
+            self.storage[index] = None
+        else:
+            print("ERROR: This is nothing at the index")
+
         pass
 
 
@@ -77,8 +92,12 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        index = self._hash_mod(key)
 
+        if self.storage[index] is not None:
+            return self.storage[index]
+        else:
+            return None
 
     def resize(self):
         '''
@@ -87,34 +106,51 @@ class HashTable:
 
         Fill this in.
         '''
+        # double the capacity of storage
+        self.capacity *= 2
+        # create a new temp storage to copy
+        new_storage = [None] * self.capacity
+        # move all the elements from old to new
+        #incomplete
         pass
 
 
+hashTable = HashTable(8)
+hashTable.insert('somekey', 'somevalue')
+hashTable.insert('somekey2', 'somevalue2')
+print("Added values", hashTable.storage)
 
-if __name__ == "__main__":
-    ht = HashTable(2)
+print("Retrieve key that exists", hashTable.retrieve('somekey'))
+print("Retrieve key that does not exists", hashTable.retrieve('somekey2'))
 
-    ht.insert("line_1", "Tiny hash table")
-    ht.insert("line_2", "Filled beyond capacity")
-    ht.insert("line_3", "Linked list saves the day!")
+hashTable.remove('somekey')
+print("Removed a value", hashTable.storage)
 
-    print("")
 
-    # Test storing beyond capacity
-    print(ht.retrieve("line_1"))
-    print(ht.retrieve("line_2"))
-    print(ht.retrieve("line_3"))
+# if __name__ == "__main__":
+#     ht = HashTable(2)
 
-    # Test resizing
-    old_capacity = len(ht.storage)
-    ht.resize()
-    new_capacity = len(ht.storage)
+#     ht.insert("line_1", "Tiny hash table")
+#     ht.insert("line_2", "Filled beyond capacity")
+#     ht.insert("line_3", "Linked list saves the day!")
 
-    print(f"\nResized from {old_capacity} to {new_capacity}.\n")
+#     print("")
 
-    # Test if data intact after resizing
-    print(ht.retrieve("line_1"))
-    print(ht.retrieve("line_2"))
-    print(ht.retrieve("line_3"))
+#     # Test storing beyond capacity
+#     print(ht.retrieve("line_1"))
+#     print(ht.retrieve("line_2"))
+#     print(ht.retrieve("line_3"))
 
-    print("")
+#     # Test resizing
+#     old_capacity = len(ht.storage)
+#     ht.resize()
+#     new_capacity = len(ht.storage)
+
+#     print(f"\nResized from {old_capacity} to {new_capacity}.\n")
+
+#     # Test if data intact after resizing
+#     print(ht.retrieve("line_1"))
+#     print(ht.retrieve("line_2"))
+#     print(ht.retrieve("line_3"))
+
+#     print("")
