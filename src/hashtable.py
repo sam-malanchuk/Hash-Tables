@@ -61,9 +61,7 @@ class HashTable:
         if self.storage[index] is not None:
             print("ERROR: Index already taken by another value")
         else:
-            self.storage[index] = value
-
-        pass
+            self.storage[index] = LinkedPair(key, value)
 
 
     def remove(self, key):
@@ -81,8 +79,6 @@ class HashTable:
         else:
             print("ERROR: This is nothing at the index")
 
-        pass
-
 
     def retrieve(self, key):
         '''
@@ -94,10 +90,10 @@ class HashTable:
         '''
         index = self._hash_mod(key)
 
-        if self.storage[index] is not None:
-            return self.storage[index]
-        else:
+        if self.storage[index] is None:
             return None
+        else:
+            return self.storage[index].value
 
     def resize(self):
         '''
@@ -106,51 +102,57 @@ class HashTable:
 
         Fill this in.
         '''
+        # save a copy of the old storage
+        old_storage = self.storage
         # double the capacity of storage
         self.capacity *= 2
+
         # create a new temp storage to copy
-        new_storage = [None] * self.capacity
+        self.storage = [None] * self.capacity
         # move all the elements from old to new
-        #incomplete
+        for pair in old_storage:
+            self.insert(pair.key, pair.value)
         pass
 
 
-hashTable = HashTable(8)
-hashTable.insert('somekey', 'somevalue')
-hashTable.insert('somekey2', 'somevalue2')
-print("Added values", hashTable.storage)
+# hashTable = HashTable(8)
+# hashTable.insert('somekey', 'somevalue')
+# hashTable.insert('somekey2', 'somevalue2')
+# print("Added values", hashTable.storage)
 
-print("Retrieve key that exists", hashTable.retrieve('somekey'))
-print("Retrieve key that does not exists", hashTable.retrieve('somekey2'))
+# retrieveKey = hashTable.retrieve('somekey')
+# print(f"Retrieve key that exists '{retrieveKey}'")
+# retrieveKey = hashTable.retrieve('somekey2')
+# print(f"Retrieve key that does not exists '{retrieveKey}'")
 
-hashTable.remove('somekey')
-print("Removed a value", hashTable.storage)
+# hashTable.remove('somekey')
+# print("Removed a value", hashTable.storage)
 
 
-# if __name__ == "__main__":
-#     ht = HashTable(2)
+if __name__ == "__main__":
+    ht = HashTable(2)
 
-#     ht.insert("line_1", "Tiny hash table")
-#     ht.insert("line_2", "Filled beyond capacity")
-#     ht.insert("line_3", "Linked list saves the day!")
+    ht.insert("line_1", "Tiny hash table")
+    ht.insert("line_2", "Filled beyond capacity")
+    ht.insert("line_3", "Linked list saves the day!")
 
-#     print("")
+    print("")
 
-#     # Test storing beyond capacity
-#     print(ht.retrieve("line_1"))
-#     print(ht.retrieve("line_2"))
-#     print(ht.retrieve("line_3"))
+    # Test storing beyond capacity
+    print(ht.retrieve("line_1"))
+    print(ht.retrieve("line_2"))
+    print(ht.retrieve("line_3"))
 
-#     # Test resizing
-#     old_capacity = len(ht.storage)
-#     ht.resize()
-#     new_capacity = len(ht.storage)
+    # Test resizing
+    old_capacity = len(ht.storage)
+    ht.resize()
+    new_capacity = len(ht.storage)
 
-#     print(f"\nResized from {old_capacity} to {new_capacity}.\n")
+    print(f"\nResized from {old_capacity} to {new_capacity}.\n")
 
-#     # Test if data intact after resizing
-#     print(ht.retrieve("line_1"))
-#     print(ht.retrieve("line_2"))
-#     print(ht.retrieve("line_3"))
+    # Test if data intact after resizing
+    print(ht.retrieve("line_1"))
+    print(ht.retrieve("line_2"))
+    print(ht.retrieve("line_3"))
 
-#     print("")
+    print("")
