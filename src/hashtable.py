@@ -58,12 +58,20 @@ class HashTable:
         '''
         index = self._hash_mod(key)
 
-        if self.storage[index] is not None:
-            print("ERROR: Index already taken by another value")
-        else:
-            self.storage[index] = value
+        # print("capacity is ", self.capacity)
+        # print(f'\"{value}\" came in as {index}')
 
-        pass
+        if self.storage[index] is not None:
+            new_node = LinkedPair(key, value)
+            new_node.next = self.storage[index]
+            self.storage[index] = new_node
+        else:
+            self.storage[index] = LinkedPair(key, value)
+
+        # node = self.storage[index]
+        # while node is not None:
+        #     print(f'Node {node.key} with value {node.value}')
+        #     node = node.next
 
 
     def remove(self, key):
@@ -76,12 +84,29 @@ class HashTable:
         '''
         index = self._hash_mod(key)
         
+        # check if selected index is empty
         if self.storage[index] is not None:
-            self.storage[index] = None
+            # check if there is multiple items in the index
+            if self.storage[index].next is not None:
+                node = self.storage[index]
+                prevNode = None
+                foundKey = False
+                while node is not None:
+                    if key == node.key:
+                        foundKey = True
+                        if prevNode is None:
+                            self.storage[index] = node.next
+                        else:
+                            prevNode.next = node.next
+                    prevNode = node
+                    node = node.next
+                if foundKey is False:
+                    print("ERROR: This is nothing at the index")
+                # print(f'The next value is {self.storage[index].next.value}')
+            else:
+                self.storage[index] = None
         else:
             print("ERROR: This is nothing at the index")
-
-        pass
 
 
     def retrieve(self, key):
@@ -94,10 +119,30 @@ class HashTable:
         '''
         index = self._hash_mod(key)
 
-        if self.storage[index] is not None:
-            return self.storage[index]
-        else:
+        if self.storage[index] is None:
             return None
+        else:
+            # check if there is multiple items in the index
+            if self.storage[index].next is not None:
+                node = self.storage[index]
+                while node is not None:
+                    if key == node.key:
+                        return node.value
+                    node = node.next
+            else:
+                return self.storage[index].value
+
+    def printStorage(self):
+        for i, pair in enumerate(self.storage):
+            if pair is not None:
+                if pair.next is None:
+                    print(pair.key, pair.value, i)
+                else:
+                    linkedPair = pair
+                    while linkedPair is not None:
+                        print(linkedPair.key, linkedPair.value, i)
+                        linkedPair = linkedPair.next
+        pass
 
     def resize(self):
         '''
@@ -106,26 +151,50 @@ class HashTable:
 
         Fill this in.
         '''
+        # save a copy of the old storage
+        old_storage = self.storage
         # double the capacity of storage
         self.capacity *= 2
+
         # create a new temp storage to copy
-        new_storage = [None] * self.capacity
+        self.storage = [None] * self.capacity
         # move all the elements from old to new
-        #incomplete
+        for pair in old_storage:
+            if pair is not None:
+                if pair.next is None:
+                    self.insert(pair.key, pair.value)
+                else:
+                    linkedPair = pair
+                    while linkedPair is not None:
+                        self.insert(linkedPair.key, linkedPair.value)
+                        linkedPair = linkedPair.next
         pass
 
 
-hashTable = HashTable(8)
-hashTable.insert('somekey', 'somevalue')
-hashTable.insert('somekey2', 'somevalue2')
-print("Added values", hashTable.storage)
+# hashTable = HashTable(1)
+# hashTable.insert('somekey1', 'somevalue1')
+# hashTable.insert('somekey2', 'somevalue2')
+# hashTable.insert('somekey3', 'somevalue3')
+# hashTable.insert('somekey4', 'somevalue4')
 
-print("Retrieve key that exists", hashTable.retrieve('somekey'))
-print("Retrieve key that does not exists", hashTable.retrieve('somekey2'))
+# hashTable.remove('somekey4')
+# hashTable.remove('somekey1')
 
-hashTable.remove('somekey')
-print("Removed a value", hashTable.storage)
+# hashTable.insert('somekey1', 'somevalue1')
 
+# print(hashTable.retrieve('somekey1'))
+# print(hashTable.retrieve('somekey2'))
+# print(hashTable.retrieve('somekey3'))
+# print(hashTable.retrieve('somekey4'))
+
+# retrieveKey = hashTable.retrieve('somekey')
+# print(f"Retrieve key that exists '{retrieveKey}'")
+# retrieveKey = hashTable.retrieve('somekey2')
+# print(f"Retrieve key that does not exists '{retrieveKey}'")
+
+# hashTable.remove('somekey')
+
+# hashTable.printStorage()
 
 # if __name__ == "__main__":
 #     ht = HashTable(2)
