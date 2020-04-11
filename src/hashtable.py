@@ -84,8 +84,23 @@ class HashTable:
         '''
         index = self._hash_mod(key)
         
+        # check if selected index is empty
         if self.storage[index] is not None:
-            self.storage[index] = None
+            # check if there is multiple items in the index
+            if self.storage[index].next is not None:
+                node = self.storage[index]
+                prevNode = None
+                while node is not None:
+                    if key == node.key:
+                        if prevNode is None:
+                            self.storage[index] = node.next
+                        else:
+                            prevNode.next = node.next
+                    prevNode = node
+                    node = node.next
+                # print(f'The next value is {self.storage[index].next.value}')
+            else:
+                self.storage[index] = None
         else:
             print("ERROR: This is nothing at the index")
 
@@ -103,7 +118,15 @@ class HashTable:
         if self.storage[index] is None:
             return None
         else:
-            return self.storage[index].value
+            # check if there is multiple items in the index
+            if self.storage[index].next is not None:
+                node = self.storage[index]
+                while node is not None:
+                    if key == node.key:
+                        return node.value
+                    node = node.next
+            else:
+                return self.storage[index].value
 
     def resize(self):
         '''
@@ -127,10 +150,20 @@ class HashTable:
 
 
 hashTable = HashTable(1)
-hashTable.insert('somekey', 'somevalue')
+hashTable.insert('somekey1', 'somevalue1')
 hashTable.insert('somekey2', 'somevalue2')
 hashTable.insert('somekey3', 'somevalue3')
 hashTable.insert('somekey4', 'somevalue4')
+
+hashTable.remove('somekey4')
+hashTable.remove('somekey1')
+
+hashTable.insert('somekey1', 'somevalue1')
+
+print(hashTable.retrieve('somekey1'))
+print(hashTable.retrieve('somekey2'))
+print(hashTable.retrieve('somekey3'))
+print(hashTable.retrieve('somekey4'))
 
 # retrieveKey = hashTable.retrieve('somekey')
 # print(f"Retrieve key that exists '{retrieveKey}'")
