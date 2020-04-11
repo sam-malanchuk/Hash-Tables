@@ -1,2 +1,2 @@
-        # print("capacity is ", self.capacity)
-        # print(f'\"{value}\" came in as {index}')
+hashTable.remove('somekey')
+print("Removed a value", hashTable.storage)

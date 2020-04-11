@@ -90,14 +90,18 @@ class HashTable:
             if self.storage[index].next is not None:
                 node = self.storage[index]
                 prevNode = None
+                foundKey = False
                 while node is not None:
                     if key == node.key:
+                        foundKey = True
                         if prevNode is None:
                             self.storage[index] = node.next
                         else:
                             prevNode.next = node.next
                     prevNode = node
                     node = node.next
+                if foundKey is False:
+                    print("ERROR: This is nothing at the index")
                 # print(f'The next value is {self.storage[index].next.value}')
             else:
                 self.storage[index] = None
@@ -127,6 +131,18 @@ class HashTable:
                     node = node.next
             else:
                 return self.storage[index].value
+
+    def printStorage(self):
+        for i, pair in enumerate(self.storage):
+            if pair is not None:
+                if pair.next is None:
+                    print(pair.key, pair.value, i)
+                else:
+                    linkedPair = pair
+                    while linkedPair is not None:
+                        print(linkedPair.key, linkedPair.value, i)
+                        linkedPair = linkedPair.next
+        pass
 
     def resize(self):
         '''
@@ -160,10 +176,10 @@ hashTable.remove('somekey1')
 
 hashTable.insert('somekey1', 'somevalue1')
 
-print(hashTable.retrieve('somekey1'))
-print(hashTable.retrieve('somekey2'))
-print(hashTable.retrieve('somekey3'))
-print(hashTable.retrieve('somekey4'))
+# print(hashTable.retrieve('somekey1'))
+# print(hashTable.retrieve('somekey2'))
+# print(hashTable.retrieve('somekey3'))
+# print(hashTable.retrieve('somekey4'))
 
 # retrieveKey = hashTable.retrieve('somekey')
 # print(f"Retrieve key that exists '{retrieveKey}'")
@@ -171,8 +187,8 @@ print(hashTable.retrieve('somekey4'))
 # print(f"Retrieve key that does not exists '{retrieveKey}'")
 
 # hashTable.remove('somekey')
-# print("Removed a value", hashTable.storage)
 
+# hashTable.printStorage()
 
 # if __name__ == "__main__":
 #     ht = HashTable(2)
