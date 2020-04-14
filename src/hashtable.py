@@ -129,6 +129,7 @@ class HashTable:
                     if key == node.key:
                         return node.value
                     node = node.next
+                return None
             else:
                 return self.storage[index].value
 
@@ -142,7 +143,6 @@ class HashTable:
                     while linkedPair is not None:
                         print(linkedPair.key, linkedPair.value, i)
                         linkedPair = linkedPair.next
-        pass
 
     def resize(self):
         '''
@@ -168,10 +168,9 @@ class HashTable:
                     while linkedPair is not None:
                         self.insert(linkedPair.key, linkedPair.value)
                         linkedPair = linkedPair.next
-        pass
 
 
-# hashTable = HashTable(1)
+# hashTable = HashTable(5)
 # hashTable.insert('somekey1', 'somevalue1')
 # hashTable.insert('somekey2', 'somevalue2')
 # hashTable.insert('somekey3', 'somevalue3')
